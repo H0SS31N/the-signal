@@ -87,7 +87,7 @@ the-signal/
 
 ## Status
 
-**V0.1 beta.** Work in progress, so expect rough edges, balance changes and new content.
+**V1.0 beta.** Work in progress, so expect rough edges, balance changes and new content.
 
 ## Credits
 
