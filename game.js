@@ -13,6 +13,75 @@ const bossMusic = document.getElementById("boss-music");
 bgMusic.volume = 0.35;
 bossMusic.volume = 0.42;
 
+const loadFill = document.getElementById("load-fill");
+const loadStatus = document.getElementById("load-status");
+const loadTracks = [bgMusic, bossMusic];
+const loadProgress = new Map(loadTracks.map(track => [track, 0]));
+const LOAD_TIMEOUT_MS = 15000;
+let assetsReady = false;
+let failedTracks = 0;
+let loadTimeout = null;
+
+function updateLoading() {
+    let total = 0;
+    for (const value of loadProgress.values()) total += value;
+    const percent = Math.round((total / loadTracks.length) * 100);
+
+    loadFill.style.width = percent + "%";
+    if (!assetsReady) startButton.textContent = `LOADING ${percent}%`;
+    if (percent >= 100) finishLoading();
+}
+
+function finishLoading(timedOut = false) {
+    if (assetsReady) return;
+    assetsReady = true;
+    clearTimeout(loadTimeout);
+
+    loadFill.style.width = "100%";
+    startButton.disabled = false;
+    startButton.textContent = "PLAY";
+
+    if (failedTracks > 0) {
+        loadStatus.textContent = "AUDIO FAILED TO LOAD - PLAYING WITHOUT SOUND";
+        loadStatus.classList.add("warn");
+    } else if (timedOut) {
+        loadStatus.textContent = "SLOW CONNECTION - MUSIC MAY LAG";
+        loadStatus.classList.add("warn");
+    } else {
+        loadStatus.textContent = "SIGNAL READY";
+        loadStatus.classList.add("ready");
+    }
+}
+
+function trackDone(track, ok) {
+    if (loadProgress.get(track) === 1) return;
+    if (!ok) failedTracks++;
+    loadProgress.set(track, 1);
+    updateLoading();
+}
+
+loadTracks.forEach(track => {
+    track.addEventListener("canplaythrough", () => trackDone(track, true));
+    track.addEventListener("error", () => trackDone(track, false));
+
+    const source = track.querySelector("source");
+    if (source) source.addEventListener("error", () => trackDone(track, false));
+
+    track.addEventListener("progress", () => {
+        if (loadProgress.get(track) === 1) return;
+        if (!track.duration || !track.buffered.length) return;
+        const buffered = track.buffered.end(track.buffered.length - 1) / track.duration;
+        loadProgress.set(track, Math.min(0.99, buffered));
+        updateLoading();
+    });
+
+    if (track.readyState >= 4) trackDone(track, true);
+    else track.load();
+});
+
+loadTimeout = setTimeout(() => finishLoading(true), LOAD_TIMEOUT_MS);
+updateLoading();
+
 const W = canvas.width;
 const H = canvas.height;
 
@@ -120,6 +189,7 @@ startButton.addEventListener("click", startGame);
 restartButton.addEventListener("click", startGame);
 
 function startGame() {
+    if (!assetsReady) return;
     score = 0;
     health = 3;
     armor = 0;
