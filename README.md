@@ -90,7 +90,7 @@ the-signal/
 1. Push the repo to GitHub.
 2. Go to **Settings → Pages**.
 3. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, then save.
-4. Your game will be live at `https://YOUR-USERNAME.github.io/the-signal/` after a minute or two.
+4. Your game will be live at `https://H0SS31N.github.io/the-signal/` after a minute or two.
 
 ## Status
 
