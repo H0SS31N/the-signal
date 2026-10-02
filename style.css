@@ -269,3 +269,53 @@ footer {
 .controls span {
     color: #c9d0d3;
 }
+
+.load-bar {
+    width: 100%;
+    height: 6px;
+    margin: 4px 0 10px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 3px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+}
+
+#load-fill {
+    width: 0%;
+    height: 100%;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,.45);
+    transition: width .2s ease-out;
+}
+
+.load-status {
+    margin: 0 0 18px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #19e6ff;
+    animation: loadBlink 1.1s steps(2, end) infinite;
+}
+
+.load-status.ready {
+    color: #7cff8a;
+    animation: none;
+}
+
+.load-status.warn {
+    color: #ff2b9d;
+    animation: none;
+}
+
+button:disabled,
+button:disabled:hover {
+    background: #2a2a2a;
+    color: #888;
+    border-color: #444;
+    box-shadow: none;
+    transform: none;
+    cursor: wait;
+}
+
+@keyframes loadBlink {
+    50% { opacity: .35; }
+}
