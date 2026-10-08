@@ -50,7 +50,7 @@ The whole game is dressed as a damaged VHS broadcast: scanlines, RGB split, trac
 No install needed. Download or clone the repo and open `index.html` in any modern browser.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/the-signal.git
+git clone https://github.com/h0ss31n/the-signal.git
 cd the-signal
 ```
 
